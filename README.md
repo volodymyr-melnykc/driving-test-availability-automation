@@ -11,8 +11,14 @@ Sends a Telegram notification when a slot appears before the cutoff date
 - Slots before `CUTOFF_DATE` trigger one Telegram message per *new* slot batch.
   Already-notified slots are tracked in `state.json` — no repeat pings.
 - August-and-later slots never notify, but show up in `REPORT.md`.
-- GitHub Actions runs it every 20 minutes (`.github/workflows/check.yml`)
-  and commits the updated report back to the repo.
+- GitHub Actions runs the check (`.github/workflows/slot-watch.yml`) and
+  commits the updated report back to the repo.
+- Scheduling: a cron-job.org job ("Trafikverket slot watcher dispatch",
+  every 15 min, quarter-hour boundaries) calls the GitHub
+  `workflow_dispatch` API with a fine-grained PAT. GitHub's own `*/20`
+  cron stayed in the workflow as backup, but proved unreliable in this
+  repo (schedule events silently never fired despite kick + workflow
+  rename) — that's why the external trigger exists.
 
 ### Session keep-alive
 
