@@ -2,7 +2,7 @@
 
 Checks Trafikverket every hour for körprov B slots across 11 Skåne locations.
 Sends a Telegram notification when a slot appears before the cutoff date
-(default `2026-07-15`). The latest full snapshot is always in [REPORT.md](REPORT.md).
+(default `2026-07-25`). The latest full snapshot is always in [REPORT.md](REPORT.md).
 
 ## How it works
 
