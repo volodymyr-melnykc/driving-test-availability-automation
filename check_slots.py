@@ -5,6 +5,13 @@ Polls the occasion-bundles API for each location in locations.json,
 notifies via Telegram about new slots before CUTOFF_DATE, and writes
 a full availability snapshot to REPORT.md. Stdlib only.
 
+Session handling: Trafikverket sessions live 30 minutes (sliding) and the
+FpsExternalIdentity token rotates on every response. The script therefore
+honors Set-Cookie headers and persists the rotated cookies to
+COOKIE_STORE_FILE so the next run (<=20 min later) continues the session.
+The TRV_COOKIE env var seeds the store and takes precedence whenever its
+LoginValid timestamp is newer than the store's (i.e. after a fresh login).
+
 Required env vars:
     TRV_COOKIE          full Cookie header value from a logged-in browser session
     TRV_SSN             personnummer used for the booking session
@@ -12,6 +19,7 @@ Required env vars:
     TELEGRAM_CHAT_ID    chat id to notify (optional: skip notifications)
 Optional:
     CUTOFF_DATE         notify only for slots strictly before this date (default 2026-07-15)
+    COOKIE_STORE_FILE   path for the persisted cookie store (default cookie_store.json)
 """
 
 import json
@@ -48,8 +56,41 @@ def save_state(state):
     STATE_FILE.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n")
 
 
-def fetch_location(cookie, ssn, location_id):
-    """Return deduped list of occasions for one location."""
+def parse_cookie_string(cookie_str):
+    cookies = {}
+    for part in cookie_str.split(";"):
+        part = part.strip()
+        if "=" in part:
+            k, v = part.split("=", 1)
+            cookies[k] = v
+    return cookies
+
+
+def login_valid_ts(cookies):
+    """LoginValid cookie as comparable string, e.g. '2026-06-10 15:29'."""
+    return cookies.get("LoginValid", "")
+
+
+def load_cookie_store(store_file, env_cookie):
+    """Prefer the persisted (rotated) store unless the env cookie is newer."""
+    env_cookies = parse_cookie_string(env_cookie)
+    if store_file.exists():
+        stored = json.loads(store_file.read_text())
+        if login_valid_ts(stored) >= login_valid_ts(env_cookies):
+            return stored
+    return env_cookies
+
+
+def apply_set_cookies(cookies, headers):
+    for sc in headers.get_all("Set-Cookie") or []:
+        first = sc.split(";", 1)[0]
+        if "=" in first:
+            k, v = first.split("=", 1)
+            cookies[k] = v
+
+
+def fetch_location(cookies, ssn, location_id):
+    """Return deduped occasions for one location; rotates cookies in place."""
     payload = {
         "bookingSession": {
             "socialSecurityNumber": ssn,
@@ -80,7 +121,7 @@ def fetch_location(cookie, ssn, location_id):
     headers = {
         "Accept": "application/json, text/plain, */*",
         "Content-Type": "application/json; charset=UTF-8",
-        "Cookie": cookie,
+        "Cookie": "; ".join(f"{k}={v}" for k, v in cookies.items()),
         "Origin": "https://fp.trafikverket.se",
         "Referer": BOOKING_URL,
         "User-Agent": (
@@ -93,6 +134,7 @@ def fetch_location(cookie, ssn, location_id):
         API_URL, data=json.dumps(payload).encode(), headers=headers, method="POST"
     )
     with urllib.request.urlopen(req, timeout=30) as resp:
+        apply_set_cookies(cookies, resp.headers)
         body = json.loads(resp.read().decode())
 
     if body.get("type") == "LoginRequiredException" or (
@@ -153,12 +195,16 @@ def write_report(results, errors, cutoff):
 
 
 def main():
-    cookie = os.environ.get("TRV_COOKIE")
+    env_cookie = os.environ.get("TRV_COOKIE")
     ssn = os.environ.get("TRV_SSN")
-    if not cookie or not ssn:
+    if not env_cookie or not ssn:
         print("ERROR: TRV_COOKIE and TRV_SSN env vars are required", file=sys.stderr)
         return 2
     cutoff = os.environ.get("CUTOFF_DATE", "2026-07-15")
+    store_file = Path(os.environ.get("COOKIE_STORE_FILE", BASE_DIR / "cookie_store.json"))
+
+    cookies = load_cookie_store(store_file, env_cookie)
+    print(f"Session LoginValid: {login_valid_ts(cookies) or 'unknown'}")
 
     locations = json.loads(LOCATIONS_FILE.read_text())
     state = load_state()
@@ -169,7 +215,7 @@ def main():
         if i > 0:
             time.sleep(REQUEST_DELAY_SECONDS)
         try:
-            results[name] = fetch_location(cookie, ssn, location_id)
+            results[name] = fetch_location(cookies, ssn, location_id)
             earliest = results[name][0]["date"] if results[name] else "none"
             print(f"{name}: {len(results[name])} slots, earliest {earliest}")
         except LoginRequired as e:
@@ -181,10 +227,13 @@ def main():
             results[name] = []
             print(f"{name}: ERROR {e}", file=sys.stderr)
 
+    # persist rotated cookies even on failure, so a partial session survives
+    store_file.write_text(json.dumps(cookies, indent=1) + "\n")
+
     if login_failed:
         if not state.get("cookie_alert_sent"):
             send_telegram(
-                "⚠️ Trafikverket slot checker: session cookie expired.\n"
+                "⚠️ Trafikverket slot checker: session expired.\n"
                 "Log in at https://fp.trafikverket.se/Boka/, copy the Cookie "
                 "header from DevTools, then run:\n"
                 "gh secret set TRV_COOKIE"

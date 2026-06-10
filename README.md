@@ -11,8 +11,21 @@ Sends a Telegram notification when a slot appears before the cutoff date
 - Slots before `CUTOFF_DATE` trigger one Telegram message per *new* slot batch.
   Already-notified slots are tracked in `state.json` — no repeat pings.
 - August-and-later slots never notify, but show up in `REPORT.md`.
-- GitHub Actions runs it at minute 7 of every hour (`.github/workflows/check.yml`)
+- GitHub Actions runs it every 20 minutes (`.github/workflows/check.yml`)
   and commits the updated report back to the repo.
+
+### Session keep-alive
+
+Trafikverket sessions expire after **30 minutes of inactivity** (sliding
+window) and the `FpsExternalIdentity` token rotates on every response.
+The script honors `Set-Cookie` headers and persists rotated cookies to
+`cookie_store.enc` (AES-256 encrypted with the `COOKIE_KEY` secret,
+committed by CI). With runs every 20 minutes the session stays alive
+indefinitely — until GitHub skips enough scheduled runs to exceed the
+30-minute window. Then you get one Telegram alert and must log in again.
+The `TRV_COOKIE` secret is only the *seed*: it is used when its
+`LoginValid` timestamp is newer than the store's (i.e. right after you
+refresh it following a fresh login).
 
 ## Setup
 

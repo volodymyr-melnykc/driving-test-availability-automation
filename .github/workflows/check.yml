@@ -2,7 +2,7 @@ name: Check driving test slots
 
 on:
   schedule:
-    - cron: '7 * * * *'
+    - cron: '*/20 * * * *'
   workflow_dispatch:
 
 concurrency:
@@ -18,6 +18,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Decrypt cookie store
+        env:
+          COOKIE_KEY: ${{ secrets.COOKIE_KEY }}
+        run: |
+          if [ -f cookie_store.enc ]; then
+            openssl enc -d -aes-256-cbc -pbkdf2 -pass env:COOKIE_KEY \
+              -in cookie_store.enc -out cookie_store.json
+          fi
+
       - name: Check slots
         env:
           TRV_COOKIE: ${{ secrets.TRV_COOKIE }}
@@ -26,11 +35,23 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python3 check_slots.py
 
+      - name: Encrypt cookie store
+        if: always()
+        env:
+          COOKIE_KEY: ${{ secrets.COOKIE_KEY }}
+        run: |
+          if [ -f cookie_store.json ]; then
+            openssl enc -aes-256-cbc -pbkdf2 -pass env:COOKIE_KEY \
+              -in cookie_store.json -out cookie_store.enc
+            rm cookie_store.json
+          fi
+
       - name: Commit report and state
         if: always()
         run: |
           git config user.name "slot-checker[bot]"
           git config user.email "slot-checker@users.noreply.github.com"
-          git add REPORT.md state.json
+          git add REPORT.md state.json cookie_store.enc
           git diff --cached --quiet || git commit -m "Update availability report [skip ci]"
+          git pull --rebase origin main
           git push
