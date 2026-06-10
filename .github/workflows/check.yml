@@ -1,0 +1,36 @@
+name: Check driving test slots
+
+on:
+  schedule:
+    - cron: '7 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: slot-check
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check slots
+        env:
+          TRV_COOKIE: ${{ secrets.TRV_COOKIE }}
+          TRV_SSN: ${{ secrets.TRV_SSN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 check_slots.py
+
+      - name: Commit report and state
+        if: always()
+        run: |
+          git config user.name "slot-checker[bot]"
+          git config user.email "slot-checker@users.noreply.github.com"
+          git add REPORT.md state.json
+          git diff --cached --quiet || git commit -m "Update availability report [skip ci]"
+          git push
