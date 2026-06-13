@@ -1,6 +1,6 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-06-13 18:01 UTC  
+Last checked: 2026-06-13 18:08 UTC  
 Notification cutoff: slots before **2026-07-25**
 
 | Location | Earliest slots | Cost |
