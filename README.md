@@ -27,11 +27,16 @@ window) and the `FpsExternalIdentity` token rotates on every response.
 The script honors `Set-Cookie` headers and persists rotated cookies to
 `cookie_store.enc` (AES-256 encrypted with the `COOKIE_KEY` secret,
 committed by CI). With runs every 20 minutes the session stays alive
-indefinitely — until GitHub skips enough scheduled runs to exceed the
-30-minute window. Then you get one Telegram alert and must log in again.
-The `TRV_COOKIE` secret is only the *seed*: it is used when its
-`LoginValid` timestamp is newer than the store's (i.e. right after you
-refresh it following a fresh login).
+indefinitely — until enough scheduled runs are skipped to exceed the
+30-minute window. Then the session dies and must be re-seeded by a fresh
+BankID login (this can't be automated). While the session is down you get
+a Telegram alert, repeated every 6 hours until you refresh — so an expired
+session can't sit silently for days. A failed run never overwrites the
+stored cookies with the dead ones, so a newer `TRV_COOKIE` seed always wins
+on the next run. `REPORT.md` also shows "Session valid until" so you can
+spot drift at a glance. The `TRV_COOKIE` secret is only the *seed*: it is
+used when its `LoginValid` timestamp is newer than the store's (i.e. right
+after you refresh it following a fresh login).
 
 ## Setup
 

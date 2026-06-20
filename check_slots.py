@@ -28,7 +28,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
@@ -40,6 +40,7 @@ API_URL = "https://fp.trafikverket.se/Boka/occasion-bundles"
 BOOKING_URL = "https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0"
 REQUEST_DELAY_SECONDS = 3
 MAX_SEEN_KEYS = 2000
+RE_ALERT_HOURS = 6  # re-nag this often while the session stays expired
 
 
 class LoginRequired(Exception):
@@ -49,7 +50,7 @@ class LoginRequired(Exception):
 def load_state():
     if STATE_FILE.exists():
         return json.loads(STATE_FILE.read_text())
-    return {"seen": [], "cookie_alert_sent": False}
+    return {"seen": [], "last_cookie_alert": None}
 
 
 def save_state(state):
@@ -168,12 +169,13 @@ def send_telegram(text):
         resp.read()
 
 
-def write_report(results, errors, cutoff):
+def write_report(results, errors, cutoff, session_valid):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines = [
         "# Driving Test Availability — Skåne",
         "",
         f"Last checked: {now}  ",
+        f"Session valid until: {session_valid or 'unknown'} (Swedish local time)  ",
         f"Notification cutoff: slots before **{cutoff}**",
         "",
         "| Location | Earliest slots | Cost |",
@@ -208,6 +210,7 @@ def main():
 
     locations = json.loads(LOCATIONS_FILE.read_text())
     state = load_state()
+    state.pop("cookie_alert_sent", None)  # migrate from the old one-shot flag
     results, errors = {}, {}
     login_failed = False
 
@@ -227,21 +230,31 @@ def main():
             results[name] = []
             print(f"{name}: ERROR {e}", file=sys.stderr)
 
-    # persist rotated cookies even on failure, so a partial session survives
-    store_file.write_text(json.dumps(cookies, indent=1) + "\n")
-
     if login_failed:
-        if not state.get("cookie_alert_sent"):
+        # Do NOT persist on a hard login failure: the rotated cookies are dead,
+        # and overwriting the store would also clobber a still-newer env seed.
+        # Re-nag every RE_ALERT_HOURS so an expired session can't go silently
+        # unnoticed for days — recovery needs a manual BankID login.
+        now = datetime.now(timezone.utc)
+        last_alert = state.get("last_cookie_alert")
+        due = last_alert is None or (
+            now - datetime.fromisoformat(last_alert)
+        ) >= timedelta(hours=RE_ALERT_HOURS)
+        if due:
             send_telegram(
                 "⚠️ Trafikverket slot checker: session expired.\n"
                 "Log in at https://fp.trafikverket.se/Boka/, copy the Cookie "
                 "header from DevTools, then run:\n"
                 "gh secret set TRV_COOKIE"
             )
-            state["cookie_alert_sent"] = True
+            state["last_cookie_alert"] = now.isoformat()
             save_state(state)
         return 1
-    state["cookie_alert_sent"] = False
+
+    # persist rotated cookies (success or recoverable per-location error) so the
+    # sliding session continues on the next run
+    store_file.write_text(json.dumps(cookies, indent=1) + "\n")
+    state["last_cookie_alert"] = None
 
     today = date.today().isoformat()
     seen = set(state.get("seen", []))
@@ -272,7 +285,7 @@ def main():
     seen = sorted(k for k in seen if k.split("|")[1] >= today)[-MAX_SEEN_KEYS:]
     state["seen"] = seen
     save_state(state)
-    write_report(results, errors, cutoff)
+    write_report(results, errors, cutoff, login_valid_ts(cookies))
     return 0
 
 
