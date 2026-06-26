@@ -1,21 +1,35 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-06-26 22:31 UTC  
+Last checked: 2026-06-26 22:51 UTC  
 Session valid until: 2026-06-27 01:01 (Swedish local time)  
 Notification cutoff: slots before **2026-07-25**
 
 | Location | Earliest slots | Cost |
 |---|---|---|
-| Malmö | 2026-09-08 09:05<br>2026-09-08 13:40<br>2026-09-08 14:40 | 1 800 kr |
-| Trelleborg | 2026-08-24 08:15<br>2026-08-24 09:00<br>2026-08-24 10:00 | 1 800 kr |
-| Ystad | 2026-09-03 12:55<br>2026-09-03 14:40<br>2026-09-10 11:35 | 1 800 kr |
-| Lund | 2026-09-08 12:30<br>2026-09-08 13:15<br>2026-09-08 14:15 | 1 800 kr |
-| Landskrona | 2026-09-23 09:35<br>2026-09-23 13:30<br>2026-09-23 14:30 | 1 800 kr |
-| Helsingborg | 2026-08-31 07:45<br>2026-08-31 09:35<br>2026-08-31 13:30 | 1 800 kr |
-| Simrishamn | 2026-10-14 13:30<br>2026-10-28 09:45<br>2026-10-28 10:30 | 1 800 kr |
-| Ängelholm | 2026-09-22 13:30<br>2026-09-22 14:30<br>2026-09-23 08:30 | 1 800 kr |
-| Hässleholm | 2026-09-09 13:45<br>2026-09-15 13:45<br>2026-09-17 09:00 | 1 800 kr |
-| Kristianstad | 2026-08-17 10:45 | 1 800 kr |
-| Sölvesborg | 2026-10-07 09:10<br>2026-10-07 11:35<br>2026-10-07 14:30 | 1 800 kr |
+| Malmö | no slots found |  |
+| Trelleborg | no slots found |  |
+| Ystad | no slots found |  |
+| Lund | no slots found |  |
+| Landskrona | no slots found |  |
+| Helsingborg | no slots found |  |
+| Simrishamn | no slots found |  |
+| Ängelholm | no slots found |  |
+| Hässleholm | no slots found |  |
+| Kristianstad | no slots found |  |
+| Sölvesborg | no slots found |  |
+
+## Errors
+
+- Malmö: <urlopen error timed out>
+- Trelleborg: <urlopen error timed out>
+- Ystad: <urlopen error timed out>
+- Lund: <urlopen error timed out>
+- Landskrona: <urlopen error timed out>
+- Helsingborg: <urlopen error timed out>
+- Simrishamn: <urlopen error timed out>
+- Ängelholm: <urlopen error timed out>
+- Hässleholm: <urlopen error timed out>
+- Kristianstad: <urlopen error timed out>
+- Sölvesborg: <urlopen error timed out>
 
 [Book on Trafikverket](https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0)
