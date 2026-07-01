@@ -30,7 +30,6 @@ import urllib.error
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 BASE_DIR = Path(__file__).parent
 STATE_FILE = BASE_DIR / "state.json"
@@ -42,14 +41,6 @@ BOOKING_URL = "https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0
 REQUEST_DELAY_SECONDS = 3
 MAX_SEEN_KEYS = 2000
 RE_ALERT_HOURS = 6  # re-nag this often while the session stays expired
-
-# The check schedule pauses overnight (no runs ~22:40-07:00 Stockholm), so the
-# session is always dead at the first morning run. That's expected, not an
-# incident, so we skip the alert during this window and only nag once it's
-# still failing afterwards (i.e. you forgot to refresh the cookie).
-STOCKHOLM = ZoneInfo("Europe/Stockholm")
-MORNING_SUPPRESS_START = (7, 0)
-MORNING_SUPPRESS_END = (7, 40)
 
 
 class LoginRequired(Exception):
@@ -160,11 +151,6 @@ def fetch_location(cookies, ssn, location_id):
     return sorted(occasions.values(), key=lambda o: (o["date"], o["time"]))
 
 
-def in_morning_suppress_window(now_utc):
-    local = now_utc.astimezone(STOCKHOLM).time()
-    return (MORNING_SUPPRESS_START <= (local.hour, local.minute) < MORNING_SUPPRESS_END)
-
-
 def send_telegram(text):
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
@@ -250,9 +236,6 @@ def main():
         # Re-nag every RE_ALERT_HOURS so an expired session can't go silently
         # unnoticed for days — recovery needs a manual BankID login.
         now = datetime.now(timezone.utc)
-        if in_morning_suppress_window(now):
-            print("Session expired during expected overnight gap; alert suppressed")
-            return 1
         last_alert = state.get("last_cookie_alert")
         due = last_alert is None or (
             now - datetime.fromisoformat(last_alert)
