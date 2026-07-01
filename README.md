@@ -1,6 +1,6 @@
 # Driving Test Slot Watcher — Skåne
 
-Checks Trafikverket every hour for körprov B slots across 11 Skåne locations.
+Checks Trafikverket for körprov B slots across 11 Skåne locations.
 Sends a Telegram notification when a slot appears before the cutoff date
 (default `2026-07-25`). The latest full snapshot is always in [REPORT.md](REPORT.md).
 
