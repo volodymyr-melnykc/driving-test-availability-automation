@@ -14,17 +14,17 @@ Sends a Telegram notification when a slot appears before the cutoff date
 - GitHub Actions runs the check (`.github/workflows/slot-watch.yml`) and
   commits the updated report back to the repo.
 - Scheduling: a cron-job.org job ("Trafikverket slot watcher dispatch")
-  calls the GitHub `workflow_dispatch` API with a fine-grained PAT,
-  every 15 min, 24/7. GitHub's own cron stayed in the workflow as
-  backup, but proved unreliable in this repo (schedule events silently
-  never fired despite kick + workflow rename) — that's why the external
-  trigger exists.
-- The repo is **public** so Actions minutes are unlimited (private repos
-  get a 2000 min/month free cap, which running every 15-20 min 24/7
-  blows through — GitHub bills a minimum of 1 minute per run regardless
-  of how short the job actually takes). No PII lives in the repo itself:
-  the personnummer and session cookie are GitHub Secrets, and the
-  persisted cookie store is AES-256 encrypted before being committed.
+  calls the GitHub `workflow_dispatch` API with a fine-grained PAT.
+  GitHub's own cron stayed in the workflow as backup, but proved
+  unreliable in this repo (schedule events silently never fired despite
+  kick + workflow rename) — that's why the external trigger exists.
+  Currently runs every 20 min, 07:00-22:40 Europe/Stockholm (paused
+  overnight to save Actions minutes).
+- Because checks pause overnight, the session is always expired at the
+  first morning run. The script suppresses the Telegram alert during
+  that expected 07:00-07:40 window and only nags if it's still failing
+  afterwards — so a fresh cookie is needed each morning, but silently
+  (no alert) unless you forget past 07:40.
 
 ### Session keep-alive
 
