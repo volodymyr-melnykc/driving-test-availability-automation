@@ -1,13 +1,9 @@
 {
   "seen": [
-    "Helsingborg|2026-06-29|12:45",
-    "Helsingborg|2026-06-29|13:30",
-    "Helsingborg|2026-06-30|15:15",
     "Helsingborg|2026-07-06|11:10",
     "Helsingborg|2026-07-10|14:30",
     "Helsingborg|2026-07-22|07:45",
     "Helsingborg|2026-07-23|07:45",
-    "Hässleholm|2026-06-30|11:30",
     "Hässleholm|2026-07-14|13:00",
     "Hässleholm|2026-07-15|13:45",
     "Hässleholm|2026-07-23|14:45",
@@ -22,12 +18,8 @@
     "Landskrona|2026-07-08|08:30",
     "Landskrona|2026-07-08|10:20",
     "Landskrona|2026-07-16|10:20",
-    "Lund|2026-06-29|13:15",
-    "Lund|2026-06-29|14:15",
     "Sölvesborg|2026-07-15|09:55",
-    "Trelleborg|2026-06-29|14:45",
-    "Trelleborg|2026-06-30|10:00",
     "Ystad|2026-07-02|13:40"
   ],
-  "last_cookie_alert": "2026-07-01T01:56:20.758467+00:00"
+  "last_cookie_alert": null
 }
