@@ -1,6 +1,6 @@
 # Driving Test Slot Watcher — Skåne
 
-Checks Trafikverket for körprov B slots across 11 Skåne locations.
+Checks Trafikverket for körprov B slots across 10 Skåne locations.
 Sends a Telegram notification when a slot appears before the cutoff date
 (default `2026-07-25`). The latest full snapshot is always in [REPORT.md](REPORT.md).
 
@@ -9,8 +9,8 @@ Sends a Telegram notification when a slot appears before the cutoff date
 - `check_slots.py` polls `fp.trafikverket.se/Boka/occasion-bundles` for the
   locations in `locations.json`, 3s between requests.
 - Requests are batched: the API accepts one anchor + up to 3 nearby
-  locations at once, so 11 locations normally take ~3 requests instead of
-  11. The API caps bundles per response and favors earlier slots, so a
+  locations at once, so 10 locations normally take ~3 requests instead of
+  10. The API caps bundles per response and favors earlier slots, so a
   location whose only availability is far in the future can be crowded out
   of a batch and come back empty. That never hides an *early* slot (those
   sort to the top), but to keep the report honest any location that comes
