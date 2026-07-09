@@ -30,7 +30,6 @@ import urllib.error
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 BASE_DIR = Path(__file__).parent
 STATE_FILE = BASE_DIR / "state.json"
@@ -42,14 +41,11 @@ BOOKING_URL = "https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0
 REQUEST_DELAY_SECONDS = 3
 MAX_SEEN_KEYS = 2000
 RE_ALERT_HOURS = 6  # re-nag this often while the session stays expired
-
-# The check schedule pauses overnight (no runs ~22:40-07:00 Stockholm), so the
-# session is always dead at the first morning run. That's expected, not an
-# incident, so we skip the alert during this window and only nag once it's
-# still failing afterwards (i.e. you forgot to refresh the cookie).
-STOCKHOLM = ZoneInfo("Europe/Stockholm")
-MORNING_SUPPRESS_START = (7, 0)
-MORNING_SUPPRESS_END = (7, 40)
+# The API accepts one anchor + up to 3 nearby locations per request (the same
+# 4-location cap the booking UI enforces). Extra nearby ids are silently
+# dropped, so we batch our locations in groups of this size to cut the request
+# count per run from 11 to 3.
+LOCATIONS_PER_REQUEST = 4
 
 
 class LoginRequired(Exception):
@@ -99,8 +95,13 @@ def apply_set_cookies(cookies, headers):
             cookies[k] = v
 
 
-def fetch_location(cookies, ssn, location_id):
-    """Return deduped occasions for one location; rotates cookies in place."""
+def fetch_batch(cookies, ssn, location_ids):
+    """Query up to LOCATIONS_PER_REQUEST locations in one request.
+
+    The first id is the anchor (locationId), the rest are nearbyLocationIds.
+    Returns {location_id: sorted occasions}; rotates cookies in place.
+    """
+    anchor, nearby = location_ids[0], location_ids[1:]
     payload = {
         "bookingSession": {
             "socialSecurityNumber": ssn,
@@ -119,8 +120,8 @@ def fetch_location(cookies, ssn, location_id):
         "occasionBundleQuery": {
             "startDate": datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00.000Z"),
             "searchedMonths": 0,
-            "locationId": location_id,
-            "nearbyLocationIds": [],
+            "locationId": anchor,
+            "nearbyLocationIds": nearby,
             "languageId": 0,
             "vehicleTypeId": 2,
             "tachographTypeId": 1,
@@ -152,17 +153,16 @@ def fetch_location(cookies, ssn, location_id):
     ):
         raise LoginRequired(body.get("data", {}).get("message", "login required"))
 
-    occasions = {}
+    # dedupe occasions (the API repeats them) and split by location
+    by_location = {loc_id: {} for loc_id in location_ids}
     for bundle in body.get("data", {}).get("bundles", []):
         for occ in bundle.get("occasions", []):
-            key = (occ["locationId"], occ["date"], occ["time"])
-            occasions[key] = occ
-    return sorted(occasions.values(), key=lambda o: (o["date"], o["time"]))
-
-
-def in_morning_suppress_window(now_utc):
-    local = now_utc.astimezone(STOCKHOLM).time()
-    return (MORNING_SUPPRESS_START <= (local.hour, local.minute) < MORNING_SUPPRESS_END)
+            loc_id = occ["locationId"]
+            by_location.setdefault(loc_id, {})[(occ["date"], occ["time"])] = occ
+    return {
+        loc_id: sorted(occ_map.values(), key=lambda o: (o["date"], o["time"]))
+        for loc_id, occ_map in by_location.items()
+    }
 
 
 def send_telegram(text):
@@ -210,6 +210,61 @@ def write_report(results, errors, cutoff, session_valid):
     REPORT_FILE.write_text("\n".join(lines))
 
 
+def collect_availability(cookies, ssn, locations):
+    """Fetch occasions for every location, batching requests 4-at-a-time.
+
+    The API caps bundles per response and prioritizes earlier slots, so a
+    location whose only availability is far in the future can be crowded out
+    of a batch and come back empty. That never hides an *early* slot (those
+    sort to the top), but it makes "empty" ambiguous — so any location that
+    returns nothing in its batch is re-queried on its own to confirm. Returns
+    ({name: sorted occasions}, {label: error}). Raises LoginRequired.
+    """
+    name_by_id = {loc_id: name for name, loc_id in locations.items()}
+    ids = list(locations.values())
+    batches = [
+        ids[i : i + LOCATIONS_PER_REQUEST]
+        for i in range(0, len(ids), LOCATIONS_PER_REQUEST)
+    ]
+
+    results = {name: [] for name in locations}
+    errors = {}
+    request_count = 0
+
+    def run_query(query_ids, label):
+        nonlocal request_count
+        if request_count > 0:
+            time.sleep(REQUEST_DELAY_SECONDS)
+        request_count += 1
+        try:
+            for loc_id, occasions in fetch_batch(cookies, ssn, query_ids).items():
+                name = name_by_id.get(loc_id)
+                if name is not None and occasions:
+                    results[name] = occasions
+            return True
+        except (urllib.error.URLError, OSError, json.JSONDecodeError, KeyError) as e:
+            errors[label] = str(e)
+            print(f"{label}: ERROR {e}", file=sys.stderr)
+            return False
+
+    for batch in batches:
+        label = "/".join(name_by_id[x] for x in batch)
+        run_query(batch, label)
+
+    # Re-query, on their own, any location left empty — could be genuinely
+    # empty or crowded out of its batch. This confirms the empty ones and
+    # recovers any that were dropped.
+    empty = [name for name, occ in results.items() if not occ]
+    for name in empty:
+        run_query([locations[name]], name)
+
+    for name, occ in results.items():
+        earliest = occ[0]["date"] if occ else "none"
+        print(f"{name}: {len(occ)} slots, earliest {earliest}")
+    print(f"({request_count} requests for {len(locations)} locations)")
+    return results, errors
+
+
 def main():
     env_cookie = os.environ.get("TRV_COOKIE")
     ssn = os.environ.get("TRV_SSN")
@@ -223,26 +278,15 @@ def main():
     print(f"Session LoginValid: {login_valid_ts(cookies) or 'unknown'}")
 
     locations = json.loads(LOCATIONS_FILE.read_text())
+
     state = load_state()
     state.pop("cookie_alert_sent", None)  # migrate from the old one-shot flag
-    results, errors = {}, {}
-    login_failed = False
-
-    for i, (name, location_id) in enumerate(locations.items()):
-        if i > 0:
-            time.sleep(REQUEST_DELAY_SECONDS)
-        try:
-            results[name] = fetch_location(cookies, ssn, location_id)
-            earliest = results[name][0]["date"] if results[name] else "none"
-            print(f"{name}: {len(results[name])} slots, earliest {earliest}")
-        except LoginRequired as e:
-            print(f"{name}: LOGIN REQUIRED ({e})", file=sys.stderr)
-            login_failed = True
-            break
-        except (urllib.error.URLError, OSError, json.JSONDecodeError, KeyError) as e:
-            errors[name] = str(e)
-            results[name] = []
-            print(f"{name}: ERROR {e}", file=sys.stderr)
+    try:
+        results, errors = collect_availability(cookies, ssn, locations)
+        login_failed = False
+    except LoginRequired as e:
+        print(f"LOGIN REQUIRED ({e})", file=sys.stderr)
+        results, errors, login_failed = {}, {}, True
 
     if login_failed:
         # Do NOT persist on a hard login failure: the rotated cookies are dead,
@@ -250,9 +294,6 @@ def main():
         # Re-nag every RE_ALERT_HOURS so an expired session can't go silently
         # unnoticed for days — recovery needs a manual BankID login.
         now = datetime.now(timezone.utc)
-        if in_morning_suppress_window(now):
-            print("Session expired during expected overnight gap; alert suppressed")
-            return 1
         last_alert = state.get("last_cookie_alert")
         due = last_alert is None or (
             now - datetime.fromisoformat(last_alert)
