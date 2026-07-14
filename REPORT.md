@@ -1,13 +1,13 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-07-14 15:31 UTC  
-Session valid until: 2026-07-14 18:01 (Swedish local time)  
+Last checked: 2026-07-14 15:45 UTC  
+Session valid until: 2026-07-14 18:15 (Swedish local time)  
 Notification cutoff: slots before **2026-07-25**
 
 | Location | Earliest slots | Cost |
 |---|---|---|
 | Malmö | 2026-09-22 14:40<br>2026-09-23 09:05<br>2026-09-23 10:50 | 1 800 kr |
-| Trelleborg | 2026-08-24 08:15<br>2026-09-04 15:30<br>2026-09-14 08:15 | 1 800 kr |
+| Trelleborg | 2026-09-04 15:30<br>2026-09-14 08:15<br>2026-09-14 09:00 | 1 800 kr |
 | Ystad | 2026-09-24 14:40 | 1 800 kr |
 | Lund | 2026-09-22 08:40<br>2026-09-22 12:30<br>2026-09-22 13:15 | 1 800 kr |
 | Landskrona | 2026-09-23 13:30<br>2026-09-23 14:30<br>2026-09-24 08:30 | 1 800 kr |
