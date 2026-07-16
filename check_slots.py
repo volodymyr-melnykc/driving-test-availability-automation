@@ -47,6 +47,13 @@ RE_ALERT_HOURS = 6  # re-nag this often while the session stays expired
 # count per run from 11 to 3.
 LOCATIONS_PER_REQUEST = 4
 
+# Körprov B comes in two transmissions, distinguished by vehicleTypeId. We
+# check both. Each has its own booking deep-link (label, vehicleTypeId, url).
+VEHICLE_TYPES = [
+    ("Manual", 2, "https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0"),
+    ("Automatic", 4, "https://fp.trafikverket.se/Boka/ng/search/PRLLePIrPydClD/5/0/0/0"),
+]
+
 
 class LoginRequired(Exception):
     pass
@@ -95,10 +102,11 @@ def apply_set_cookies(cookies, headers):
             cookies[k] = v
 
 
-def fetch_batch(cookies, ssn, location_ids):
+def fetch_batch(cookies, ssn, location_ids, vehicle_type_id):
     """Query up to LOCATIONS_PER_REQUEST locations in one request.
 
     The first id is the anchor (locationId), the rest are nearbyLocationIds.
+    vehicle_type_id selects transmission (2 = manual, 4 = automatic).
     Returns {location_id: sorted occasions}; rotates cookies in place.
     """
     anchor, nearby = location_ids[0], location_ids[1:]
@@ -123,7 +131,7 @@ def fetch_batch(cookies, ssn, location_ids):
             "locationId": anchor,
             "nearbyLocationIds": nearby,
             "languageId": 0,
-            "vehicleTypeId": 2,
+            "vehicleTypeId": vehicle_type_id,
             "tachographTypeId": 1,
             "occasionChoiceId": 1,
             "examinationTypeId": 12,
@@ -183,7 +191,7 @@ def send_telegram(text):
         resp.read()
 
 
-def write_report(results, errors, cutoff, session_valid):
+def write_report(results, errors, cutoff, session_valid, locations):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines = [
         "# Driving Test Availability — Skåne",
@@ -192,17 +200,19 @@ def write_report(results, errors, cutoff, session_valid):
         f"Session valid until: {session_valid or 'unknown'} (Swedish local time)  ",
         f"Notification cutoff: slots before **{cutoff}**",
         "",
-        "| Location | Earliest slots | Cost |",
-        "|---|---|---|",
+        "| Location | Transmission | Earliest slots | Cost |",
+        "|---|---|---|---|",
     ]
-    for name, occasions in results.items():
-        if occasions:
-            earliest = occasions[:3]
-            slots = "<br>".join(f"{o['date']} {o['time']}" for o in earliest)
-            cost = earliest[0].get("cost", "")
-        else:
-            slots, cost = "no slots found", ""
-        lines.append(f"| {name} | {slots} | {cost} |")
+    for name in locations:
+        for transmission, _, _ in VEHICLE_TYPES:
+            occasions = results.get((name, transmission), [])
+            if occasions:
+                earliest = occasions[:3]
+                slots = "<br>".join(f"{o['date']} {o['time']}" for o in earliest)
+                cost = earliest[0].get("cost", "")
+            else:
+                slots, cost = "no slots found", ""
+            lines.append(f"| {name} | {transmission} | {slots} | {cost} |")
     if errors:
         lines += ["", "## Errors", ""]
         lines += [f"- {name}: {err}" for name, err in errors.items()]
@@ -211,14 +221,17 @@ def write_report(results, errors, cutoff, session_valid):
 
 
 def collect_availability(cookies, ssn, locations):
-    """Fetch occasions for every location, batching requests 4-at-a-time.
+    """Fetch occasions for every location and transmission, batching requests.
 
-    The API caps bundles per response and prioritizes earlier slots, so a
-    location whose only availability is far in the future can be crowded out
-    of a batch and come back empty. That never hides an *early* slot (those
-    sort to the top), but it makes "empty" ambiguous — so any location that
-    returns nothing in its batch is re-queried on its own to confirm. Returns
-    ({name: sorted occasions}, {label: error}). Raises LoginRequired.
+    Each transmission (manual / automatic) is queried separately because it's
+    a different vehicleTypeId. Within a transmission, locations are batched
+    4-at-a-time. The API caps bundles per response and prioritizes earlier
+    slots, so a location whose only availability is far in the future can be
+    crowded out of a batch and come back empty. That never hides an *early*
+    slot (those sort to the top), but it makes "empty" ambiguous — so any
+    (location, transmission) that returns nothing in its batch is re-queried
+    on its own to confirm. Returns ({(name, transmission): sorted occasions},
+    {label: error}). Raises LoginRequired.
     """
     name_by_id = {loc_id: name for name, loc_id in locations.items()}
     ids = list(locations.values())
@@ -227,41 +240,45 @@ def collect_availability(cookies, ssn, locations):
         for i in range(0, len(ids), LOCATIONS_PER_REQUEST)
     ]
 
-    results = {name: [] for name in locations}
+    results = {}
     errors = {}
     request_count = 0
 
-    def run_query(query_ids, label):
+    def run_query(query_ids, vehicle_type_id, transmission, label):
         nonlocal request_count
         if request_count > 0:
             time.sleep(REQUEST_DELAY_SECONDS)
         request_count += 1
         try:
-            for loc_id, occasions in fetch_batch(cookies, ssn, query_ids).items():
+            batch_res = fetch_batch(cookies, ssn, query_ids, vehicle_type_id)
+            for loc_id, occasions in batch_res.items():
                 name = name_by_id.get(loc_id)
                 if name is not None and occasions:
-                    results[name] = occasions
+                    results[(name, transmission)] = occasions
             return True
         except (urllib.error.URLError, OSError, json.JSONDecodeError, KeyError) as e:
             errors[label] = str(e)
             print(f"{label}: ERROR {e}", file=sys.stderr)
             return False
 
-    for batch in batches:
-        label = "/".join(name_by_id[x] for x in batch)
-        run_query(batch, label)
+    for transmission, vehicle_type_id, _ in VEHICLE_TYPES:
+        for batch in batches:
+            label = f"{transmission}: " + "/".join(name_by_id[x] for x in batch)
+            run_query(batch, vehicle_type_id, transmission, label)
+        # Re-query, on their own, any location left empty for this transmission
+        # — could be genuinely empty or crowded out of its batch.
+        empty = [n for n in locations if (n, transmission) not in results]
+        for name in empty:
+            run_query([locations[name]], vehicle_type_id, transmission,
+                      f"{transmission}: {name}")
 
-    # Re-query, on their own, any location left empty — could be genuinely
-    # empty or crowded out of its batch. This confirms the empty ones and
-    # recovers any that were dropped.
-    empty = [name for name, occ in results.items() if not occ]
-    for name in empty:
-        run_query([locations[name]], name)
-
-    for name, occ in results.items():
-        earliest = occ[0]["date"] if occ else "none"
-        print(f"{name}: {len(occ)} slots, earliest {earliest}")
-    print(f"({request_count} requests for {len(locations)} locations)")
+    for transmission, _, _ in VEHICLE_TYPES:
+        for name in locations:
+            occ = results.get((name, transmission), [])
+            earliest = occ[0]["date"] if occ else "none"
+            print(f"{transmission} {name}: {len(occ)} slots, earliest {earliest}")
+    print(f"({request_count} requests for {len(locations)} locations × "
+          f"{len(VEHICLE_TYPES)} transmissions)")
     return results, errors
 
 
@@ -314,36 +331,39 @@ def main():
     store_file.write_text(json.dumps(cookies, indent=1) + "\n")
     state["last_cookie_alert"] = None
 
+    booking_url = {label: url for label, _, url in VEHICLE_TYPES}
     today = date.today().isoformat()
     seen = set(state.get("seen", []))
     new_matches = []
-    for name, occasions in results.items():
+    for (name, transmission), occasions in results.items():
         for occ in occasions:
             if occ["date"] >= cutoff:
                 continue
-            key = f"{name}|{occ['date']}|{occ['time']}"
+            key = f"{name}|{transmission}|{occ['date']}|{occ['time']}"
             if key not in seen:
-                new_matches.append((name, occ))
+                new_matches.append((name, transmission, occ))
                 seen.add(key)
 
     if new_matches:
-        new_matches.sort(key=lambda m: (m[1]["date"], m[1]["time"]))
+        new_matches.sort(key=lambda m: (m[2]["date"], m[2]["time"], m[0]))
         lines = [f"🚗 Early driving test slots found (before {cutoff}):", ""]
         lines += [
-            f"• {occ['date']} {occ['time']} — {name} ({occ.get('cost', '?')})"
-            for name, occ in new_matches
+            f"• {occ['date']} {occ['time']} — {name} [{transmission}]"
+            f" ({occ.get('cost', '?')})"
+            for name, transmission, occ in new_matches
         ]
-        lines += ["", f"Book now: {BOOKING_URL}"]
+        transmissions = {m[1] for m in new_matches}
+        lines += [""] + [f"Book {t}: {booking_url[t]}" for t in sorted(transmissions)]
         send_telegram("\n".join(lines))
         print(f"Notified about {len(new_matches)} new slot(s)")
     else:
         print("No new slots before cutoff")
 
-    # prune keys for past dates, cap total size
-    seen = sorted(k for k in seen if k.split("|")[1] >= today)[-MAX_SEEN_KEYS:]
+    # prune keys for past dates, cap total size (key: name|transmission|date|time)
+    seen = sorted(k for k in seen if k.split("|")[2:3] >= [today])[-MAX_SEEN_KEYS:]
     state["seen"] = seen
     save_state(state)
-    write_report(results, errors, cutoff, login_valid_ts(cookies))
+    write_report(results, errors, cutoff, login_valid_ts(cookies), locations)
     return 0
 
 
