@@ -18,7 +18,7 @@ Required env vars:
     TELEGRAM_BOT_TOKEN  bot token from @BotFather (optional: skip notifications)
     TELEGRAM_CHAT_ID    chat id to notify (optional: skip notifications)
 Optional:
-    CUTOFF_DATE         notify only for slots strictly before this date (default 2026-07-25)
+    CUTOFF_DATE         notify only for slots strictly before this date (default 2026-08-13)
     COOKIE_STORE_FILE   path for the persisted cookie store (default cookie_store.json)
 """
 
@@ -271,7 +271,7 @@ def main():
     if not env_cookie or not ssn:
         print("ERROR: TRV_COOKIE and TRV_SSN env vars are required", file=sys.stderr)
         return 2
-    cutoff = os.environ.get("CUTOFF_DATE", "2026-07-25")
+    cutoff = os.environ.get("CUTOFF_DATE", "2026-08-13")
     store_file = Path(os.environ.get("COOKIE_STORE_FILE", BASE_DIR / "cookie_store.json"))
 
     cookies = load_cookie_store(store_file, env_cookie)

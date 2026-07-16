@@ -2,7 +2,7 @@
 
 Checks Trafikverket for körprov B slots across 9 Skåne locations.
 Sends a Telegram notification when a slot appears before the cutoff date
-(default `2026-07-25`). The latest full snapshot is always in [REPORT.md](REPORT.md).
+(default `2026-08-13`, i.e. up to and including Aug 12). The latest full snapshot is always in [REPORT.md](REPORT.md).
 
 ## How it works
 
@@ -14,11 +14,11 @@ Sends a Telegram notification when a slot appears before the cutoff date
   location whose only availability is far in the future can be crowded out
   of a batch and come back empty. That never hides an *early* slot (those
   sort to the top), but to keep the report honest any location that comes
-  back empty is re-queried on its own to confirm. Steady state is ~5
+  back empty is re-queried on its own to confirm. Steady state is ~3
   requests per run.
 - Slots before `CUTOFF_DATE` trigger one Telegram message per *new* slot batch.
   Already-notified slots are tracked in `state.json` — no repeat pings.
-- August-and-later slots never notify, but show up in `REPORT.md`.
+- Slots on or after `CUTOFF_DATE` never notify, but show up in `REPORT.md`.
 - GitHub Actions runs the check (`.github/workflows/slot-watch.yml`) and
   commits the updated report back to the repo.
 - Scheduling: a cron-job.org job ("Trafikverket slot watcher dispatch")
