@@ -1,7 +1,7 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-07-19 07:16 UTC  
-Session valid until: 2026-07-19 09:46 (Swedish local time)  
+Last checked: 2026-07-19 07:31 UTC  
+Session valid until: 2026-07-19 10:01 (Swedish local time)  
 Notification cutoff: slots before **2026-08-13**
 
 | Location | Transmission | Earliest slots | Cost |
@@ -24,5 +24,9 @@ Notification cutoff: slots before **2026-08-13**
 | Hässleholm | Automatic | 2026-10-15 10:45<br>2026-10-15 13:00<br>2026-10-15 13:45 | 1 800 kr |
 | Kristianstad | Manual | 2026-09-21 15:30<br>2026-09-28 08:15<br>2026-09-28 09:00 | 1 800 kr |
 | Kristianstad | Automatic | 2026-09-21 08:15<br>2026-09-21 13:00<br>2026-09-21 14:45 | 1 800 kr |
+
+## Errors
+
+- Manual: Landskrona/Helsingborg/Ängelholm/Hässleholm: Remote end closed connection without response
 
 [Book on Trafikverket](https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0)
