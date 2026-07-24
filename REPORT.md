@@ -1,14 +1,14 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-07-24 19:31 UTC  
-Session valid until: 2026-07-24 22:01 (Swedish local time)  
+Last checked: 2026-07-24 19:46 UTC  
+Session valid until: 2026-07-24 22:16 (Swedish local time)  
 Notification cutoff: slots before **2026-08-13**
 
 | Location | Transmission | Earliest slots | Cost |
 |---|---|---|---|
 | Malmö | Manual | 2026-09-30 09:05<br>2026-09-30 09:50 | 1 800 kr |
 | Malmö | Automatic | no slots found |  |
-| Trelleborg | Manual | 2026-09-28 08:15<br>2026-09-28 09:00<br>2026-09-28 10:45 | 1 800 kr |
+| Trelleborg | Manual | 2026-09-28 08:15<br>2026-09-28 09:00<br>2026-09-28 10:00 | 1 800 kr |
 | Trelleborg | Automatic | 2026-09-29 08:15<br>2026-09-29 13:45<br>2026-09-29 14:45 | 1 800 kr |
 | Ystad | Manual | 2026-10-01 14:40<br>2026-10-08 09:50<br>2026-10-08 11:35 | 1 800 kr |
 | Ystad | Automatic | no slots found |  |
@@ -20,7 +20,7 @@ Notification cutoff: slots before **2026-08-13**
 | Helsingborg | Automatic | 2026-09-17 13:30<br>2026-09-17 14:30<br>2026-09-17 15:15 | 1 800 kr |
 | Ängelholm | Manual | 2026-09-29 14:30<br>2026-09-30 13:30<br>2026-09-30 14:30 | 1 800 kr |
 | Ängelholm | Automatic | 2026-09-30 13:30 | 1 800 kr |
-| Hässleholm | Manual | 2026-10-13 13:00<br>2026-10-13 13:45<br>2026-10-20 13:00 | 1 800 kr |
+| Hässleholm | Manual | 2026-10-13 13:45<br>2026-10-20 13:00<br>2026-10-20 13:45 | 1 800 kr |
 | Hässleholm | Automatic | 2026-10-29 10:00<br>2026-10-29 13:45<br>2026-10-29 14:45 | 1 800 kr |
 | Kristianstad | Manual | 2026-09-30 13:45<br>2026-09-30 14:45 | 1 800 kr |
 | Kristianstad | Automatic | 2026-09-28 15:30<br>2026-09-30 10:00<br>2026-09-30 10:45 | 1 800 kr |
