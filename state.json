@@ -1,6 +1,16 @@
 {
   "seen": [
-    "Helsingborg|Automatic|2026-08-10|11:10"
+    "Helsingborg|Automatic|2026-08-10|11:10",
+    "Helsingborg|Automatic|2026-09-28|15:15",
+    "Helsingborg|Manual|2026-09-28|07:45",
+    "Helsingborg|Manual|2026-09-28|08:30",
+    "Helsingborg|Manual|2026-09-28|14:30",
+    "Helsingborg|Manual|2026-09-28|15:15",
+    "Helsingborg|Manual|2026-09-29|07:45",
+    "Helsingborg|Manual|2026-09-29|13:30",
+    "Helsingborg|Manual|2026-09-29|14:30",
+    "Helsingborg|Manual|2026-09-29|15:15",
+    "Helsingborg|Manual|2026-09-30|07:45"
   ],
-  "last_cookie_alert": "2026-08-10T08:25:40.735446+00:00"
+  "last_cookie_alert": null
 }
