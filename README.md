@@ -3,7 +3,7 @@
 Checks Trafikverket for körprov B slots (both manual and automatic
 transmission) across 9 Skåne locations.
 Sends a Telegram notification when a slot appears before the cutoff date
-(default `2026-08-13`, i.e. up to and including Aug 12). The latest full snapshot is always in [REPORT.md](REPORT.md).
+(default `2026-10-01`, i.e. up to and including Sep 30). The latest full snapshot is always in [REPORT.md](REPORT.md).
 
 ## How it works
 
@@ -102,5 +102,5 @@ export TELEGRAM_CHAT_ID='...'
 python3 check_slots.py
 ```
 
-`CUTOFF_DATE=2026-09-01 python3 check_slots.py` forces matches (everything
-before September) — handy for testing notifications end to end.
+`CUTOFF_DATE=2026-11-01 python3 check_slots.py` forces matches (everything
+before November) — handy for testing notifications end to end.
