@@ -1,7 +1,7 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-08-17 06:46 UTC  
-Session valid until: 2026-08-17 09:16 (Swedish local time)  
+Last checked: 2026-08-17 06:53 UTC  
+Session valid until: 2026-08-17 09:23 (Swedish local time)  
 Notification cutoff: slots before **2026-10-01**
 
 | Location | Transmission | Earliest slots | Cost |
