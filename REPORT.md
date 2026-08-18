@@ -1,7 +1,7 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-08-18 13:46 UTC  
-Session valid until: 2026-08-18 16:16 (Swedish local time)  
+Last checked: 2026-08-18 14:01 UTC  
+Session valid until: 2026-08-18 16:31 (Swedish local time)  
 Notification cutoff: slots before **2026-10-01**
 
 | Location | Transmission | Earliest slots | Cost |
@@ -19,10 +19,10 @@ Notification cutoff: slots before **2026-10-01**
 | Helsingborg | Manual | 2026-10-05 14:30<br>2026-10-05 15:15<br>2026-10-06 07:45 | 1 800 kr |
 | Helsingborg | Automatic | 2026-10-02 15:15<br>2026-10-05 14:30<br>2026-10-05 15:15 | 1 800 kr |
 | Ängelholm | Manual | 2026-10-15 13:30<br>2026-10-15 14:30<br>2026-10-20 08:30 | 1 800 kr |
-| Ängelholm | Automatic | 2026-10-15 14:30<br>2026-10-20 08:30<br>2026-10-20 10:20 | 1 800 kr |
-| Hässleholm | Manual | 2026-11-10 10:45<br>2026-11-10 13:00<br>2026-11-10 13:45 | 1 800 kr |
+| Ängelholm | Automatic | 2026-10-20 08:30<br>2026-10-20 10:20<br>2026-10-20 11:10 | 1 800 kr |
+| Hässleholm | Manual | 2026-11-10 13:00<br>2026-11-10 13:45<br>2026-11-10 14:45 | 1 800 kr |
 | Hässleholm | Automatic | 2026-11-10 10:45<br>2026-11-10 11:30<br>2026-11-10 13:00 | 1 800 kr |
-| Kristianstad | Manual | 2026-10-16 09:00<br>2026-10-16 10:45<br>2026-10-16 11:30 | 1 800 kr |
+| Kristianstad | Manual | 2026-10-16 08:15<br>2026-10-16 09:00<br>2026-10-16 10:45 | 1 800 kr |
 | Kristianstad | Automatic | 2026-10-12 15:30<br>2026-10-13 14:45<br>2026-10-13 15:30 | 1 800 kr |
 
 [Book on Trafikverket](https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0)
