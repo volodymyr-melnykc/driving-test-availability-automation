@@ -1,6 +1,6 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-08-24 18:17 UTC  
+Last checked: 2026-08-24 18:32 UTC  
 Session valid until: 2026-08-24 19:16 (Swedish local time)  
 Notification cutoff: slots before **2026-10-01**
 
@@ -29,7 +29,7 @@ Notification cutoff: slots before **2026-10-01**
 
 - Manual: Malmö/Trelleborg/Ystad/Lund: HTTP Error 503: Service Unavailable
 - Manual: Landskrona/Helsingborg/Ängelholm/Hässleholm: HTTP Error 503: Service Unavailable
-- Manual: Kristianstad: HTTP Error 500: Internal Server Error
+- Manual: Kristianstad: HTTP Error 503: Service Unavailable
 - Manual: Malmö: HTTP Error 503: Service Unavailable
 - Manual: Trelleborg: HTTP Error 503: Service Unavailable
 - Manual: Ystad: HTTP Error 503: Service Unavailable
@@ -38,12 +38,12 @@ Notification cutoff: slots before **2026-10-01**
 - Manual: Helsingborg: HTTP Error 503: Service Unavailable
 - Manual: Ängelholm: HTTP Error 503: Service Unavailable
 - Manual: Hässleholm: HTTP Error 503: Service Unavailable
-- Automatic: Malmö/Trelleborg/Ystad/Lund: HTTP Error 500: Internal Server Error
-- Automatic: Landskrona/Helsingborg/Ängelholm/Hässleholm: HTTP Error 500: Internal Server Error
+- Automatic: Malmö/Trelleborg/Ystad/Lund: HTTP Error 503: Service Unavailable
+- Automatic: Landskrona/Helsingborg/Ängelholm/Hässleholm: HTTP Error 503: Service Unavailable
 - Automatic: Kristianstad: HTTP Error 503: Service Unavailable
-- Automatic: Malmö: HTTP Error 500: Internal Server Error
-- Automatic: Trelleborg: HTTP Error 500: Internal Server Error
-- Automatic: Ystad: The read operation timed out
+- Automatic: Malmö: HTTP Error 503: Service Unavailable
+- Automatic: Trelleborg: HTTP Error 503: Service Unavailable
+- Automatic: Ystad: HTTP Error 503: Service Unavailable
 - Automatic: Lund: HTTP Error 503: Service Unavailable
 - Automatic: Landskrona: HTTP Error 503: Service Unavailable
 - Automatic: Helsingborg: HTTP Error 503: Service Unavailable
