@@ -1,53 +1,28 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-08-24 19:17 UTC  
-Session valid until: 2026-08-24 19:16 (Swedish local time)  
+Last checked: 2026-08-25 06:49 UTC  
+Session valid until: 2026-08-25 09:19 (Swedish local time)  
 Notification cutoff: slots before **2026-10-01**
 
 | Location | Transmission | Earliest slots | Cost |
 |---|---|---|---|
-| Malmö | Manual | no slots found |  |
+| Malmö | Manual | 2026-10-27 10:50<br>2026-10-27 12:55<br>2026-10-27 13:40 | 1 800 kr |
 | Malmö | Automatic | no slots found |  |
-| Trelleborg | Manual | no slots found |  |
-| Trelleborg | Automatic | no slots found |  |
-| Ystad | Manual | no slots found |  |
+| Trelleborg | Manual | 2026-08-26 15:30<br>2026-10-12 08:15<br>2026-10-12 09:00 | 1 800 kr |
+| Trelleborg | Automatic | 2026-10-21 13:45<br>2026-10-21 14:45<br>2026-10-23 08:15 | 1 800 kr |
+| Ystad | Manual | 2026-10-15 14:40<br>2026-10-22 11:35<br>2026-10-22 12:55 | 1 800 kr |
 | Ystad | Automatic | no slots found |  |
-| Lund | Manual | no slots found |  |
-| Lund | Automatic | no slots found |  |
-| Landskrona | Manual | no slots found |  |
-| Landskrona | Automatic | no slots found |  |
-| Helsingborg | Manual | no slots found |  |
-| Helsingborg | Automatic | no slots found |  |
-| Ängelholm | Manual | no slots found |  |
-| Ängelholm | Automatic | no slots found |  |
-| Hässleholm | Manual | no slots found |  |
-| Hässleholm | Automatic | no slots found |  |
-| Kristianstad | Manual | no slots found |  |
-| Kristianstad | Automatic | no slots found |  |
-
-## Errors
-
-- Manual: Malmö/Trelleborg/Ystad/Lund: HTTP Error 503: Service Unavailable
-- Manual: Landskrona/Helsingborg/Ängelholm/Hässleholm: HTTP Error 503: Service Unavailable
-- Manual: Kristianstad: HTTP Error 503: Service Unavailable
-- Manual: Malmö: HTTP Error 503: Service Unavailable
-- Manual: Trelleborg: HTTP Error 503: Service Unavailable
-- Manual: Ystad: HTTP Error 503: Service Unavailable
-- Manual: Lund: HTTP Error 503: Service Unavailable
-- Manual: Landskrona: HTTP Error 503: Service Unavailable
-- Manual: Helsingborg: HTTP Error 503: Service Unavailable
-- Manual: Ängelholm: HTTP Error 503: Service Unavailable
-- Manual: Hässleholm: HTTP Error 503: Service Unavailable
-- Automatic: Malmö/Trelleborg/Ystad/Lund: HTTP Error 503: Service Unavailable
-- Automatic: Landskrona/Helsingborg/Ängelholm/Hässleholm: HTTP Error 503: Service Unavailable
-- Automatic: Kristianstad: HTTP Error 503: Service Unavailable
-- Automatic: Malmö: HTTP Error 503: Service Unavailable
-- Automatic: Trelleborg: HTTP Error 503: Service Unavailable
-- Automatic: Ystad: HTTP Error 503: Service Unavailable
-- Automatic: Lund: HTTP Error 503: Service Unavailable
-- Automatic: Landskrona: HTTP Error 503: Service Unavailable
-- Automatic: Helsingborg: HTTP Error 503: Service Unavailable
-- Automatic: Ängelholm: HTTP Error 503: Service Unavailable
-- Automatic: Hässleholm: HTTP Error 503: Service Unavailable
+| Lund | Manual | 2026-10-09 15:00<br>2026-10-12 11:10<br>2026-10-15 12:30 | 1 800 kr |
+| Lund | Automatic | 2026-10-16 12:30<br>2026-10-16 15:00<br>2026-10-20 08:40 | 1 800 kr |
+| Landskrona | Manual | 2026-10-15 08:30<br>2026-10-21 12:45<br>2026-10-21 14:30 | 1 800 kr |
+| Landskrona | Automatic | 2026-10-21 11:10<br>2026-10-21 12:45<br>2026-10-21 13:30 | 1 800 kr |
+| Helsingborg | Manual | 2026-10-08 07:45<br>2026-10-08 08:30<br>2026-10-08 09:35 | 1 800 kr |
+| Helsingborg | Automatic | 2026-10-06 07:45<br>2026-10-06 10:20<br>2026-10-07 07:45 | 1 800 kr |
+| Ängelholm | Manual | 2026-10-21 12:45<br>2026-10-21 14:30<br>2026-10-27 09:35 | 1 800 kr |
+| Ängelholm | Automatic | 2026-10-20 08:30<br>2026-10-21 12:45<br>2026-10-27 10:20 | 1 800 kr |
+| Hässleholm | Manual | 2026-10-06 09:00<br>2026-10-06 10:00<br>2026-10-06 10:45 | 1 800 kr |
+| Hässleholm | Automatic | 2026-11-12 14:45<br>2026-11-17 13:00<br>2026-11-17 13:45 | 1 800 kr |
+| Kristianstad | Manual | 2026-10-01 11:30<br>2026-10-19 08:15<br>2026-10-20 08:15 | 1 800 kr |
+| Kristianstad | Automatic | 2026-10-23 10:45<br>2026-10-23 11:30<br>2026-10-23 13:45 | 1 800 kr |
 
 [Book on Trafikverket](https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0)

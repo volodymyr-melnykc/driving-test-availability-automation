@@ -1,6 +1,5 @@
 {
   "seen": [
-    "Helsingborg|Automatic|2026-08-24|13:30",
     "Helsingborg|Automatic|2026-09-04|09:35",
     "Helsingborg|Automatic|2026-09-11|09:35",
     "Helsingborg|Automatic|2026-09-17|15:15",
@@ -15,10 +14,6 @@
     "Helsingborg|Automatic|2026-09-25|13:30",
     "Helsingborg|Automatic|2026-09-28|12:45",
     "Helsingborg|Automatic|2026-09-28|15:15",
-    "Helsingborg|Manual|2026-08-24|10:20",
-    "Helsingborg|Manual|2026-08-24|12:45",
-    "Helsingborg|Manual|2026-08-24|14:30",
-    "Helsingborg|Manual|2026-08-24|15:15",
     "Helsingborg|Manual|2026-08-25|07:45",
     "Helsingborg|Manual|2026-08-25|14:30",
     "Helsingborg|Manual|2026-09-02|13:30",
@@ -63,8 +58,7 @@
     "Lund|Manual|2026-09-02|15:00",
     "Lund|Manual|2026-09-03|11:10",
     "Trelleborg|Automatic|2026-09-03|14:45",
-    "Trelleborg|Manual|2026-08-24|10:00",
-    "Trelleborg|Manual|2026-08-24|13:00",
+    "Trelleborg|Manual|2026-08-26|15:30",
     "Trelleborg|Manual|2026-09-28|08:15",
     "Trelleborg|Manual|2026-09-28|10:45",
     "Trelleborg|Manual|2026-09-28|11:30",
@@ -73,5 +67,5 @@
     "Ängelholm|Automatic|2026-09-30|10:20",
     "Ängelholm|Manual|2026-09-23|10:20"
   ],
-  "last_cookie_alert": "2026-08-25T01:45:38.335307+00:00"
+  "last_cookie_alert": null
 }
