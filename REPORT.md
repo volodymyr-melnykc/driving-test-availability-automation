@@ -1,7 +1,7 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-09-05 08:35 UTC  
-Session valid until: 2026-09-05 11:05 (Swedish local time)  
+Last checked: 2026-09-05 08:46 UTC  
+Session valid until: 2026-09-05 11:16 (Swedish local time)  
 Notification cutoff: slots before **2026-10-01**
 
 | Location | Transmission | Earliest slots | Cost |
@@ -16,7 +16,7 @@ Notification cutoff: slots before **2026-10-01**
 | Lund | Automatic | 2026-10-28 10:25<br>2026-10-29 14:15<br>2026-11-03 08:40 | 1 800 kr |
 | Landskrona | Manual | 2026-10-29 11:10<br>2026-10-29 12:45<br>2026-11-04 08:30 | 1 800 kr |
 | Landskrona | Automatic | 2026-11-04 08:30<br>2026-11-04 11:10<br>2026-11-04 12:45 | 1 800 kr |
-| Helsingborg | Manual | 2026-10-16 07:45<br>2026-10-16 08:30<br>2026-10-16 12:45 | 1 800 kr |
+| Helsingborg | Manual | 2026-10-16 07:45<br>2026-10-16 12:45<br>2026-10-16 13:30 | 1 800 kr |
 | Helsingborg | Automatic | 2026-10-12 17:00<br>2026-10-14 15:15<br>2026-10-15 14:30 | 1 800 kr |
 | Ängelholm | Manual | 2026-11-03 15:15<br>2026-11-05 13:30<br>2026-11-05 14:30 | 1 800 kr |
 | Ängelholm | Automatic | 2026-11-03 15:15<br>2026-11-04 15:15<br>2026-11-10 09:35 | 1 800 kr |
