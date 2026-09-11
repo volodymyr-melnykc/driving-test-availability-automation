@@ -1,7 +1,7 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-09-11 14:46 UTC  
-Session valid until: 2026-09-11 17:16 (Swedish local time)  
+Last checked: 2026-09-11 15:02 UTC  
+Session valid until: 2026-09-11 17:32 (Swedish local time)  
 Notification cutoff: slots before **2026-10-01**
 
 | Location | Transmission | Earliest slots | Cost |
@@ -9,17 +9,17 @@ Notification cutoff: slots before **2026-10-01**
 | Malmö | Manual | 2026-11-10 09:05<br>2026-11-10 09:50<br>2026-11-10 14:40 | 1 800 kr |
 | Malmö | Automatic | no slots found |  |
 | Trelleborg | Manual | 2026-10-30 15:30<br>2026-11-02 09:00<br>2026-11-02 10:45 | 1 800 kr |
-| Trelleborg | Automatic | 2026-11-02 10:45<br>2026-11-02 11:30<br>2026-11-02 13:00 | 1 800 kr |
+| Trelleborg | Automatic | 2026-11-02 10:45<br>2026-11-02 11:30<br>2026-11-02 15:30 | 1 800 kr |
 | Ystad | Manual | 2026-11-05 14:40<br>2026-11-12 10:50<br>2026-11-12 11:35 | 1 800 kr |
 | Ystad | Automatic | no slots found |  |
 | Lund | Manual | 2026-11-02 12:30<br>2026-11-02 15:00<br>2026-11-04 08:40 | 1 800 kr |
-| Lund | Automatic | 2026-11-02 12:30<br>2026-11-02 13:15<br>2026-11-02 14:15 | 1 800 kr |
+| Lund | Automatic | 2026-11-02 13:15<br>2026-11-02 14:15<br>2026-11-02 15:00 | 1 800 kr |
 | Landskrona | Manual | 2026-11-04 13:30<br>2026-11-04 14:30<br>2026-11-05 14:30 | 1 800 kr |
 | Landskrona | Automatic | 2026-10-14 07:45<br>2026-10-14 15:15<br>2026-11-05 14:30 | 1 800 kr |
 | Helsingborg | Manual | 2026-10-08 15:15<br>2026-10-19 15:15<br>2026-10-19 16:15 | 1 800 kr |
 | Helsingborg | Automatic | 2026-10-12 11:10<br>2026-10-14 07:45<br>2026-10-16 13:30 | 1 800 kr |
 | Ängelholm | Manual | 2026-11-12 12:45<br>2026-11-12 13:30<br>2026-11-17 12:45 | 1 800 kr |
-| Ängelholm | Automatic | 2026-10-15 07:45<br>2026-10-15 15:15<br>2026-11-10 10:20 | 1 800 kr |
+| Ängelholm | Automatic | 2026-10-15 15:15<br>2026-11-10 10:20<br>2026-11-12 08:30 | 1 800 kr |
 | Hässleholm | Manual | 2026-12-01 13:00<br>2026-12-02 09:00<br>2026-12-02 10:00 | 1 800 kr |
 | Hässleholm | Automatic | 2027-01-12 13:00<br>2027-01-12 13:45<br>2027-01-12 14:45 | 1 800 kr |
 | Kristianstad | Manual | 2026-11-19 14:45<br>2026-11-19 15:30<br>2026-11-20 13:45 | 1 800 kr |
