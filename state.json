@@ -1,6 +1,5 @@
 {
   "seen": [
-    "Helsingborg|Automatic|2026-09-11|09:35",
     "Helsingborg|Automatic|2026-09-14|08:30",
     "Helsingborg|Automatic|2026-09-17|15:15",
     "Helsingborg|Automatic|2026-09-18|15:15",
@@ -14,10 +13,6 @@
     "Helsingborg|Automatic|2026-09-25|13:30",
     "Helsingborg|Automatic|2026-09-28|12:45",
     "Helsingborg|Automatic|2026-09-28|15:15",
-    "Helsingborg|Manual|2026-09-11|07:45",
-    "Helsingborg|Manual|2026-09-11|13:30",
-    "Helsingborg|Manual|2026-09-11|14:30",
-    "Helsingborg|Manual|2026-09-11|15:15",
     "Helsingborg|Manual|2026-09-14|09:35",
     "Helsingborg|Manual|2026-09-14|11:10",
     "Helsingborg|Manual|2026-09-14|13:30",
@@ -64,7 +59,6 @@
     "Landskrona|Automatic|2026-09-24|13:30",
     "Landskrona|Manual|2026-09-24|13:30",
     "Malmö|Manual|2026-09-29|09:05",
-    "Trelleborg|Manual|2026-09-11|15:30",
     "Trelleborg|Manual|2026-09-28|08:15",
     "Trelleborg|Manual|2026-09-28|10:45",
     "Trelleborg|Manual|2026-09-28|11:30",
