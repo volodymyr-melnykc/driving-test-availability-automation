@@ -1,7 +1,7 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-09-24 09:16 UTC  
-Session valid until: 2026-09-24 11:46 (Swedish local time)  
+Last checked: 2026-09-24 09:31 UTC  
+Session valid until: 2026-09-24 12:01 (Swedish local time)  
 Notification cutoff: slots before **2026-10-01**
 
 | Location | Transmission | Earliest slots | Cost |
@@ -9,18 +9,18 @@ Notification cutoff: slots before **2026-10-01**
 | Malmö | Manual | 2026-11-18 12:55<br>2026-11-18 14:40<br>2026-11-24 09:05 | 1 800 kr |
 | Malmö | Automatic | no slots found |  |
 | Trelleborg | Manual | 2026-11-06 14:45<br>2026-11-06 15:30<br>2026-11-09 08:15 | 1 800 kr |
-| Trelleborg | Automatic | 2026-11-10 08:15<br>2026-11-10 09:00<br>2026-11-10 10:45 | 1 800 kr |
-| Ystad | Manual | 2026-10-21 09:50<br>2026-10-21 10:50<br>2026-10-21 11:35 | 1 800 kr |
+| Trelleborg | Automatic | 2026-10-23 09:00<br>2026-11-10 08:15<br>2026-11-10 09:00 | 1 800 kr |
+| Ystad | Manual | 2026-10-21 10:50<br>2026-10-21 11:35<br>2026-10-22 09:05 | 1 800 kr |
 | Ystad | Automatic | no slots found |  |
-| Lund | Manual | 2026-11-11 10:25<br>2026-11-11 13:15<br>2026-11-11 14:15 | 1 800 kr |
+| Lund | Manual | 2026-11-11 13:15<br>2026-11-11 14:15<br>2026-11-11 15:00 | 1 800 kr |
 | Lund | Automatic | 2026-11-17 15:00<br>2026-11-18 11:10<br>2026-11-18 12:30 | 1 800 kr |
 | Landskrona | Manual | 2026-11-25 13:30<br>2026-11-25 14:30<br>2026-11-26 08:30 | 1 800 kr |
 | Landskrona | Automatic | 2026-11-25 14:30<br>2026-11-25 15:15<br>2026-11-26 08:30 | 1 800 kr |
-| Helsingborg | Manual | 2026-10-03 08:30<br>2026-10-05 12:45<br>2026-10-09 15:15 | 2 200 kr |
+| Helsingborg | Manual | 2026-10-03 08:30<br>2026-10-03 12:45<br>2026-10-03 13:30 | 2 200 kr |
 | Helsingborg | Automatic | 2026-10-03 08:30<br>2026-10-03 12:45<br>2026-10-03 13:30 | 2 200 kr |
 | Ängelholm | Manual | 2026-11-19 14:30<br>2026-11-25 08:30<br>2026-11-25 11:10 | 1 800 kr |
 | Ängelholm | Automatic | 2026-11-24 08:30<br>2026-11-25 12:45<br>2026-11-25 13:30 | 1 800 kr |
-| Hässleholm | Manual | 2026-12-10 14:45<br>2026-12-17 10:45<br>2026-12-17 11:30 | 1 800 kr |
+| Hässleholm | Manual | 2026-12-17 10:45<br>2026-12-17 11:30<br>2026-12-17 13:00 | 1 800 kr |
 | Hässleholm | Automatic | 2027-01-14 10:45<br>2027-01-14 11:30<br>2027-01-14 13:00 | 1 800 kr |
 | Kristianstad | Manual | 2027-01-11 08:15<br>2027-01-11 11:30<br>2027-01-11 13:00 | 1 800 kr |
 | Kristianstad | Automatic | 2027-01-11 08:15<br>2027-01-11 09:00<br>2027-01-11 13:00 | 1 800 kr |
