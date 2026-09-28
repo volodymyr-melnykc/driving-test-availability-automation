@@ -1,6 +1,6 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-09-28 18:02 UTC  
+Last checked: 2026-09-28 18:17 UTC  
 Session valid until: 2026-09-28 19:19 (Swedish local time)  
 Notification cutoff: slots before **2026-10-09**
 
@@ -24,30 +24,5 @@ Notification cutoff: slots before **2026-10-09**
 | Hässleholm | Automatic | no slots found |  |
 | Kristianstad | Manual | no slots found |  |
 | Kristianstad | Automatic | no slots found |  |
-
-## Errors
-
-- Manual: Malmö/Trelleborg/Ystad/Lund: HTTP Error 503: Service Unavailable
-- Manual: Landskrona/Helsingborg/Ängelholm/Hässleholm: HTTP Error 503: Service Unavailable
-- Manual: Kristianstad: HTTP Error 503: Service Unavailable
-- Manual: Malmö: HTTP Error 503: Service Unavailable
-- Manual: Trelleborg: HTTP Error 503: Service Unavailable
-- Manual: Ystad: HTTP Error 503: Service Unavailable
-- Manual: Lund: HTTP Error 503: Service Unavailable
-- Manual: Landskrona: HTTP Error 503: Service Unavailable
-- Manual: Helsingborg: HTTP Error 503: Service Unavailable
-- Manual: Ängelholm: HTTP Error 503: Service Unavailable
-- Manual: Hässleholm: HTTP Error 503: Service Unavailable
-- Automatic: Malmö/Trelleborg/Ystad/Lund: HTTP Error 503: Service Unavailable
-- Automatic: Landskrona/Helsingborg/Ängelholm/Hässleholm: HTTP Error 503: Service Unavailable
-- Automatic: Kristianstad: HTTP Error 503: Service Unavailable
-- Automatic: Malmö: HTTP Error 503: Service Unavailable
-- Automatic: Trelleborg: HTTP Error 503: Service Unavailable
-- Automatic: Ystad: HTTP Error 503: Service Unavailable
-- Automatic: Lund: HTTP Error 503: Service Unavailable
-- Automatic: Landskrona: HTTP Error 503: Service Unavailable
-- Automatic: Helsingborg: HTTP Error 503: Service Unavailable
-- Automatic: Ängelholm: HTTP Error 503: Service Unavailable
-- Automatic: Hässleholm: HTTP Error 503: Service Unavailable
 
 [Book on Trafikverket](https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0)
