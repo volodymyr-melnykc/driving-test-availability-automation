@@ -1,11 +1,4 @@
 {
-  "seen": [
-    "Helsingborg|Manual|2026-09-30|07:45",
-    "Kristianstad|Manual|2026-09-30|08:15",
-    "Kristianstad|Manual|2026-09-30|11:30",
-    "Malmö|Manual|2026-09-30|09:50",
-    "Malmö|Manual|2026-09-30|14:40",
-    "Ängelholm|Automatic|2026-09-30|10:20"
-  ],
+  "seen": [],
   "last_cookie_alert": null
 }
