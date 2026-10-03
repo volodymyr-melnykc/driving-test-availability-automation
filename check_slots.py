@@ -156,8 +156,12 @@ def fetch_batch(cookies, ssn, location_ids, vehicle_type_id):
         apply_set_cookies(cookies, resp.headers)
         body = json.loads(resp.read().decode())
 
-    if body.get("type") == "LoginRequiredException" or (
-        isinstance(body.get("data"), dict) and body["data"].get("success") is False
+    # An expired session answers HTTP 200 with {"status": 401, ...} in the body
+    # (since ~2026-09-28); older responses used type=LoginRequiredException.
+    if (
+        body.get("type") == "LoginRequiredException"
+        or body.get("status") in (401, 403)
+        or (isinstance(body.get("data"), dict) and body["data"].get("success") is False)
     ):
         raise LoginRequired(body.get("data", {}).get("message", "login required"))
 
