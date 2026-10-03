@@ -22,6 +22,7 @@ Optional:
     COOKIE_STORE_FILE   path for the persisted cookie store (default cookie_store.json)
 """
 
+import hashlib
 import json
 import os
 import sys
@@ -84,12 +85,27 @@ def login_valid_ts(cookies):
     return cookies.get("LoginValid", "")
 
 
+SEED_KEY = "__seed"  # bookkeeping entry in the store; never sent as a cookie
+
+
 def load_cookie_store(store_file, env_cookie):
-    """Prefer the persisted (rotated) store unless the env cookie is newer."""
+    """Prefer the persisted (rotated) store unless TRV_COOKIE was refreshed.
+
+    The store remembers a hash of the TRV_COOKIE it was seeded from. A
+    different hash means the secret was refreshed after a fresh login, so it
+    wins even when the new cookie carries no LoginValid to compare.
+    """
     env_cookies = parse_cookie_string(env_cookie)
+    seed = hashlib.sha256(env_cookie.encode()).hexdigest()[:16]
+    env_cookies[SEED_KEY] = seed
     if store_file.exists():
         stored = json.loads(store_file.read_text())
-        if login_valid_ts(stored) >= login_valid_ts(env_cookies):
+        if stored.get(SEED_KEY) == seed:
+            return stored
+        if SEED_KEY not in stored and login_valid_ts(env_cookies) and (
+            login_valid_ts(stored) >= login_valid_ts(env_cookies)
+        ):
+            stored[SEED_KEY] = seed  # legacy store, same seed still current
             return stored
     return env_cookies
 
@@ -140,7 +156,7 @@ def fetch_batch(cookies, ssn, location_ids, vehicle_type_id):
     headers = {
         "Accept": "application/json, text/plain, */*",
         "Content-Type": "application/json; charset=UTF-8",
-        "Cookie": "; ".join(f"{k}={v}" for k, v in cookies.items()),
+        "Cookie": "; ".join(f"{k}={v}" for k, v in cookies.items() if k != SEED_KEY),
         "Origin": "https://fp.trafikverket.se",
         "Referer": BOOKING_URL,
         "User-Agent": (
