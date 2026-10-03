@@ -1,6 +1,6 @@
 # Driving Test Availability — Skåne
 
-Last checked: 2026-10-03 07:17 UTC  
+Last checked: 2026-10-03 07:32 UTC  
 Session valid until: 2026-09-28 19:19 (Swedish local time)  
 Notification cutoff: slots before **2026-10-09**
 
@@ -24,5 +24,9 @@ Notification cutoff: slots before **2026-10-09**
 | Hässleholm | Automatic | no slots found |  |
 | Kristianstad | Manual | no slots found |  |
 | Kristianstad | Automatic | no slots found |  |
+
+## Errors
+
+- Automatic: Landskrona: Remote end closed connection without response
 
 [Book on Trafikverket](https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0)
