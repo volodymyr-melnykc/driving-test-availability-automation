@@ -48,7 +48,11 @@ indefinitely — until enough scheduled runs are skipped to exceed the
 30-minute window. Then the session dies and must be re-seeded by a fresh
 BankID login (this can't be automated). While the session is down you get
 a Telegram alert, repeated every 6 hours until you refresh — so an expired
-session can't sit silently for days. A failed run never overwrites the
+session can't sit silently for days. An expired session is detected via
+`{"status": 401}` in the response body (HTTP 200); as a second safety net, a
+run where every location and transmission returns zero slots also fails and
+alerts (same 6h re-nag), in case the API's expiry response changes again.
+A failed run never overwrites the
 stored cookies with the dead ones, so a newer `TRV_COOKIE` seed always wins
 on the next run. `REPORT.md` also shows "Session valid until" so you can
 spot drift at a glance. The `TRV_COOKIE` secret is only the *seed*: it is

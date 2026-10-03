@@ -366,9 +366,31 @@ def main():
     # prune keys for past dates, cap total size (key: name|transmission|date|time)
     seen = sorted(k for k in seen if k.split("|")[2:3] >= [today])[-MAX_SEEN_KEYS:]
     state["seen"] = seen
+
+    # Safety net: every location/transmission empty almost certainly means a
+    # dead session or a changed API response, not a genuinely sold-out system.
+    all_empty = not any(results.values())
+    exit_code = 0
+    if all_empty:
+        exit_code = 1
+        now = datetime.now(timezone.utc)
+        last_alert = state.get("last_empty_alert")
+        if last_alert is None or (
+            now - datetime.fromisoformat(last_alert)
+        ) >= timedelta(hours=RE_ALERT_HOURS):
+            send_telegram(
+                "⚠️ Trafikverket slot checker: every location returned zero "
+                "slots. The session may be dead or the API response changed.\n"
+                "Refresh the cookie (gh secret set TRV_COOKIE) and check the "
+                "latest run log."
+            )
+            state["last_empty_alert"] = now.isoformat()
+    else:
+        state["last_empty_alert"] = None
+
     save_state(state)
     write_report(results, errors, cutoff, login_valid_ts(cookies), locations)
-    return 0
+    return exit_code
 
 
 if __name__ == "__main__":
