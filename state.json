@@ -1,5 +1,7 @@
 {
-  "seen": [],
-  "last_cookie_alert": "2026-10-05T10:01:17.243298+00:00",
+  "seen": [
+    "Malmö|Manual|2026-10-07|10:50"
+  ],
+  "last_cookie_alert": null,
   "last_empty_alert": null
 }
