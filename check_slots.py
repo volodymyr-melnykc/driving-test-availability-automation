@@ -41,7 +41,6 @@ API_URL = "https://fp.trafikverket.se/Boka/occasion-bundles"
 BOOKING_URL = "https://fp.trafikverket.se/Boka/ng/search/CORrMCLoCsPaRp/5/12/0/0"
 REQUEST_DELAY_SECONDS = 3
 MAX_SEEN_KEYS = 2000
-RE_ALERT_HOURS = 6  # re-nag this often while the session stays expired
 # The API accepts one anchor + up to 3 nearby locations per request (the same
 # 4-location cap the booking UI enforces). Extra nearby ids are silently
 # dropped, so we batch our locations in groups of this size to cut the request
@@ -328,21 +327,16 @@ def main():
     if login_failed:
         # Do NOT persist on a hard login failure: the rotated cookies are dead,
         # and overwriting the store would also clobber a still-newer env seed.
-        # Re-nag every RE_ALERT_HOURS so an expired session can't go silently
-        # unnoticed for days — recovery needs a manual BankID login.
-        now = datetime.now(timezone.utc)
-        last_alert = state.get("last_cookie_alert")
-        due = last_alert is None or (
-            now - datetime.fromisoformat(last_alert)
-        ) >= timedelta(hours=RE_ALERT_HOURS)
-        if due:
+        # Sessions now end ~30 min after login, so expiry is routine: alert
+        # once per outage (cleared on the next successful run), no re-nagging.
+        if state.get("last_cookie_alert") is None:
             send_telegram(
-                "⚠️ Trafikverket slot checker: session expired.\n"
-                "Log in at https://fp.trafikverket.se/Boka/, copy the Cookie "
-                "header from DevTools, then run:\n"
+                "ℹ️ Trafikverket slot checker: session ended, checks are paused.\n"
+                "To resume, log in at https://fp.trafikverket.se/Boka/, copy "
+                "the Cookie header from DevTools, then run:\n"
                 "gh secret set TRV_COOKIE"
             )
-            state["last_cookie_alert"] = now.isoformat()
+            state["last_cookie_alert"] = datetime.now(timezone.utc).isoformat()
             save_state(state)
         return 1
 
@@ -390,10 +384,7 @@ def main():
     if all_empty:
         exit_code = 1
         now = datetime.now(timezone.utc)
-        last_alert = state.get("last_empty_alert")
-        if last_alert is None or (
-            now - datetime.fromisoformat(last_alert)
-        ) >= timedelta(hours=RE_ALERT_HOURS):
+        if state.get("last_empty_alert") is None:
             send_telegram(
                 "⚠️ Trafikverket slot checker: every location returned zero "
                 "slots. The session may be dead or the API response changed.\n"

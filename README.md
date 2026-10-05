@@ -26,38 +26,32 @@ Sends a Telegram notification when a slot appears before the cutoff date
   commits the updated report back to the repo.
 - Scheduling: a cron-job.org job ("Trafikverket slot watcher dispatch")
   calls the GitHub `workflow_dispatch` API with a fine-grained PAT,
-  every 15 min, 24/7. GitHub's own cron stayed in the workflow as
+  every 5 min, 24/7 (runs fail fast while the session is dead). GitHub's own cron stayed in the workflow as
   backup, but proved unreliable in this repo (schedule events silently
   never fired despite kick + workflow rename) — that's why the external
   trigger exists.
 - The repo is **public** so Actions minutes are unlimited (private repos
-  get a 2000 min/month free cap, which running every 15 min 24/7 blows
+  get a 2000 min/month free cap, which running every 5 min 24/7 blows
   through — GitHub bills a minimum of 1 minute per run regardless of how
   short the job actually takes). No PII lives in the repo itself: the
   personnummer and session cookie are GitHub Secrets, and the persisted
   cookie store is AES-256 encrypted before being committed.
 
-### Session keep-alive
+### Sessions are short-lived (on-demand mode)
 
-Trafikverket sessions expire after **30 minutes of inactivity** (sliding
-window) and the `FpsExternalIdentity` token rotates on every response.
-The script honors `Set-Cookie` headers and persists rotated cookies to
-`cookie_store.enc` (AES-256 encrypted with the `COOKIE_KEY` secret,
-committed by CI). With runs every 15 minutes the session stays alive
-indefinitely — until enough scheduled runs are skipped to exceed the
-30-minute window. Then the session dies and must be re-seeded by a fresh
-BankID login (this can't be automated). While the session is down you get
-a Telegram alert, repeated every 6 hours until you refresh — so an expired
-session can't sit silently for days. An expired session is detected via
-`{"status": 401}` in the response body (HTTP 200); as a second safety net, a
-run where every location and transmission returns zero slots also fails and
-alerts (same 6h re-nag), in case the API's expiry response changes again.
-A failed run never overwrites the
-stored cookies with the dead ones, so a newer `TRV_COOKIE` seed always wins
-on the next run. `REPORT.md` also shows "Session valid until" so you can
-spot drift at a glance. The `TRV_COOKIE` secret is only the *seed*: it is
-used when its `LoginValid` timestamp is newer than the store's (i.e. right
-after you refresh it following a fresh login).
+Since about 2026-09-28 Trafikverket force-logs-out every session a fixed
+~30 minutes after the BankID login (`forcedLogoutAfterMinutes` in the booking
+app). Activity no longer extends it, the server no longer rotates
+`FpsExternalIdentity`/`LoginValid`, and there is no "extend session" call.
+Because BankID can't be automated, the watcher works **on demand**: after you
+log in and refresh `TRV_COOKIE` (see the runbook below), it checks every few
+minutes until the session ends, then stops until the next refresh.
+
+When the session ends you get one Telegram message (no re-nagging). Expiry is
+detected via `{"status": 401}` in the response body (HTTP 200); as a second
+safety net, a run where every location and transmission returns zero slots
+also fails and alerts once. A refreshed `TRV_COOKIE` always replaces the
+stored cookies (the store remembers a hash of the seed it came from).
 
 ## Setup
 
@@ -83,7 +77,7 @@ gh secret set TELEGRAM_CHAT_ID
 ### 3. Run
 
 Manual trigger: `gh workflow run slot-watch.yml`, or wait for the cron-job.org
-trigger (every 15 min).
+trigger (every 5 min).
 
 ## Cookie refresh runbook
 
